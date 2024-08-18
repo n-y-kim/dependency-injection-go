@@ -6,19 +6,18 @@ import (
 )
 
 func TestSideProject(t *testing.T) {
-	tests := []struct {
-		beDev    developer.BeDeveloper
-		feDev    developer.FeDeveloper
-		expected bool
-	}{
-		{developer.BeDeveloper{Language: "Golang", Experience: 2}, developer.FeDeveloper{Language: "JavaScript", Experience: 2}, true},
-		{developer.BeDeveloper{Language: "Python", Experience: 1}, developer.FeDeveloper{Language: "JavaScript", Experience: 2}, false},
+	beDev := &developer.BeDeveloper{Language: "Golang", Experience: 2}
+	feDev := &developer.FeDeveloper{Language: "JavaScript", Experience: 2}
+	project := NewSideProject([]developer.Developer{beDev, feDev})
+
+	if !project.ProjectResult() {
+		t.Errorf("Expected project to succeed, but it failed")
 	}
 
-	for _, tt := range tests {
-		got := SideProject(tt.beDev, tt.feDev)
-		if got != tt.expected {
-			t.Errorf("SideProject(%v, %v) = %v; want %v", tt.beDev, tt.feDev, got, tt.expected)
-		}
+	beDev = &developer.BeDeveloper{Language: "Python", Experience: 1}
+	project = NewSideProject([]developer.Developer{beDev, feDev})
+
+	if project.ProjectResult() {
+		t.Errorf("Expected project to fail, but it succeeded")
 	}
 }
